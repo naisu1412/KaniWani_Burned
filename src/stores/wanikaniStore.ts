@@ -61,9 +61,6 @@ export default class WaniKaniStore {
 
   @action attemptAnswer = async (answerAttempt: string) => {
     try {
-      // check if the current is in the array
-      // if kanji is not yet in the array, add
-      // if already added modify the existing if the user is correct
       runInAction(() => {
         this.isCorrect = false;
 
@@ -77,9 +74,8 @@ export default class WaniKaniStore {
 
         if (userAttempt.length !== 0) {
           this.isCorrect = true;
-          console.log("You are correct");
         }
-        
+
         this.isDisplayingResult = true;
 
       });
