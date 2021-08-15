@@ -16,3 +16,7 @@ export interface IAssignment {
     resurrected_at: string;
   };
 }
+
+export interface ISubject {
+
+}

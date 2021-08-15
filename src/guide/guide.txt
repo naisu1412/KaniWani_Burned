@@ -1,0 +1,1 @@
+> Create a model where it will accept attemptedAnswer by the user

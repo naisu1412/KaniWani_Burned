@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
@@ -38,21 +38,34 @@ const useStyles = makeStyles({
 const Quiz = () => {
   const classes = useStyles();
   const rootStore = useContext(RootStoreContext);
-  const { currentItem, isItemLoaded } = rootStore.wanikaniStore;
+  const {
+    currentItem,
+    isItemLoaded,
+    attemptAnswer,
+    nextItem,
+    isCorrect,
+    isDisplayingResult,
+  } = rootStore.wanikaniStore;
 
   return (
     <div className={classes.root}>
       <Formik
         initialValues={{ answer: "" }}
-        onSubmit={(data) => {
-          console.log(currentItem["slug"]);
-          console.log(data.answer);
+        onSubmit={(data, { resetForm }) => {
+          if (isDisplayingResult === false) {
+            attemptAnswer(data.answer);
+          } else {
+            console.log("next item");
+            nextItem();
+          }
+          resetForm();
         }}
       >
-        {() => (
+        {(props) => (
           <Grid className={classes.grid} container>
             <Grid item sm={12}>
-              <Form>
+              <Form
+              >
                 <Typography
                   className={classes.label}
                   component="p"
@@ -60,7 +73,7 @@ const Quiz = () => {
                 >
                   {isItemLoaded === true ? currentItem["characters"] : ""}
                 </Typography>
-                <TextField
+                <Field
                   type="text"
                   name="answer"
                   variant="outlined"
@@ -68,14 +81,17 @@ const Quiz = () => {
                   autoComplete="off"
                   size="small"
                   InputProps={{ classes: { input: classes.text } }}
+                  value={isDisplayingResult === true? "" : props.values.answer}
+                  as={TextField}
                 />
                 <Button
                   color="primary"
                   className={classes.button}
                   type="submit"
                 >
-                  Submit
+                  {isDisplayingResult === false ? "Submit" : "Next"}
                 </Button>
+                <pre>{isDisplayingResult === true ? `${isCorrect}` : ""} </pre>
               </Form>
             </Grid>
           </Grid>
